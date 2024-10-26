@@ -136,3 +136,10 @@ This code configures Chrome with a randomized user agent and proxy to improve an
 This project is licensed under the MIT License. For more information, check the `[LICENSE](https://www.shadowhackr.com/)` file.
 
 --- 
+## Contact Me
+
+If you have any questions or need support, feel free to reach out:
+
+- Website: [Shadow Hacker](https://www.shadowhackr.com)
+- Phone: [00962796668987](tel:00962796668987)
+
