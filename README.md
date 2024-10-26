@@ -138,8 +138,10 @@ This project is licensed under the MIT License. For more information, check the 
 --- 
 ## Contact Me
 
-If you have any questions or need support, feel free to reach out:
+For support or inquiries, you can reach out through:
 
 - Website: [Shadow Hacker](https://www.shadowhackr.com)
+- Facebook: [Tareq DJX](https://www.facebook.com/Tareq.DJX/)
 - Phone: [00962796668987](tel:00962796668987)
+
 
