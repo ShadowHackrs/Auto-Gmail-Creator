@@ -2,6 +2,8 @@
 A Python script that automates the creation of Gmail accounts. This script utilizes Selenium for web automation to navigate through the Gmail account creation process, allowing users to create accounts with random user details, proxy support, and a variety of user agents.
 ### Auto-Gmail-Creator Script Documentation
 
+![imsage alt](https://github.com/ShadowHackrs/Auto-Gmail-Creator/blob/0c2a186b388d29cd2b1787277615e9d3e79f8d4a/Screenshot%202024-10-26%20015006.png)
+
 ---
 
 ## Table of Contents
