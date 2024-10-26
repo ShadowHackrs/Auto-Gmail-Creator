@@ -70,7 +70,7 @@ pip install selenium requests unidecode fp
 1. **Run the Script**
    - Simply run the script using the command:
      ```bash
-     python auto_gmail_creator.py
+     python3 auto_gmail_creator.py
      ```
    - The script will display a banner and start creating a Gmail account using randomly generated details.
 
