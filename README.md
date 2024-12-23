@@ -130,7 +130,7 @@ driver = webdriver.Chrome(service=ChromeService(), options=options)
 This code configures Chrome with a randomized user agent and proxy to improve anonymity.
 
 ---
-<iframe width="560" height="315" src="https://www.youtube.com/embed/sDfR7QLTXkQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Watch the demo video on YouTube](https://www.youtube.com/watch?v=sDfR7QLTXkQ)
 
 
 ### License
