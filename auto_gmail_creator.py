@@ -124,9 +124,9 @@ def generate_username():
     return f"{first_name_normalized}.{last_name_normalized}{random_number}"
 
 # Account info
-your_birthday = "02 4 1950"
-your_gender = "1"
-your_password = "ShadowHacker##$$%%^^&&"
+your_birthday = "02 4 1995"
+your_gender = "2"
+your_password = "lissin002020"
 
 # Fill out Gmail registration form
 def fill_form(driver):
