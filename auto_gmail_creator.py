@@ -15,13 +15,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 import random
 import time
 import tempfile
-import shutil
-import os
 from unidecode import unidecode
 import uuid
 from fp.fp import FreeProxy  # Import FreeProxy
@@ -140,7 +138,7 @@ def fill_form(driver):
         last_name.send_keys(your_username.split('.')[1])
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-        
+
         # Fill birthday and gender
         wait = WebDriverWait(driver, 20)
         day = wait.until(EC.visibility_of_element_located((By.NAME, "day")))
@@ -157,7 +155,7 @@ def fill_form(driver):
         gender_dropdown.select_by_value(your_gender)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-        
+
         # Create custom email
         time.sleep(2)
         if driver.find_elements(By.ID, "selectionc4"):
@@ -169,7 +167,7 @@ def fill_form(driver):
         username_field.send_keys(your_username)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-        
+
         # Enter and confirm password
         password_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "Passwd")))
         password_field.clear()
@@ -180,24 +178,25 @@ def fill_form(driver):
         password_confirmation_field.send_keys(your_password)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-        
+
         # Skip phone number and recovery email
         try:
             skip_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Skip')]")))
             skip_button.click()
         except Exception as skip_error:
             print("No phone number verification step.")
-        
+
         # Agree to terms
         agree_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button span.VfPpkd-vQzf8d")))
         agree_button.click()
-        
+
         print(f"Your Gmail successfully created:\n{{\ngmail: {your_username}@gmail.com\npassword: {your_password}\n}}")
         save_email_to_file(f"{your_username}@gmail.com", your_password)
-    
+
     except Exception as e:
         print("Failed to create your Gmail, Sorry")
         print(e)
+
 
 # Create multiple accounts
 def create_multiple_accounts(number_of_accounts):
@@ -224,6 +223,7 @@ def create_multiple_accounts(number_of_accounts):
         
         # Adicionar um intervalo aleatório entre as criações de contas
         time.sleep(random.randint(5, 15))
+
 
 if __name__ == "__main__":
     number_of_accounts = 5  # Número de contas a serem criadas
