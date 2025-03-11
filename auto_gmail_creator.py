@@ -24,6 +24,7 @@ from unidecode import unidecode
 import uuid
 from fp.fp import FreeProxy  # Import FreeProxy
 import tempfile
+import os
 
 # User Agents list for random selection
 user_agents = [
@@ -187,12 +188,14 @@ def fill_form(driver):
             skip_button.click()
         except Exception as skip_error:
             print("No phone number verification step.")
-        
+
         # Agree to terms
         agree_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button span.VfPpkd-vQzf8d")))
         agree_button.click()
+        
         print(f"Your Gmail successfully created:\n{{\ngmail: {your_username}@gmail.com\npassword: {your_password}\n}}")
         save_email_to_file(f"{your_username}@gmail.com", your_password)
+    
     except Exception as e:
         print("Failed to create your Gmail, Sorry")
         print(e)
@@ -209,14 +212,17 @@ def create_multiple_accounts(number_of_accounts):
         
         user_agent = random.choice(user_agents)
         chrome_options.add_argument(f'user-agent={user_agent}')
+        
         proxy = get_working_proxy()
         chrome_options.add_argument(f'--proxy-server={proxy}')
         
         driver = webdriver.Chrome(options=chrome_options)
         fill_form(driver)
         driver.quit()
+        
+        # Adicionar um intervalo aleatório entre as criações de contas para evitar bloqueios
         time.sleep(random.randint(5, 15))
 
 if __name__ == "__main__":
-    number_of_accounts = 5
+    number_of_accounts = 5  # Número de contas a serem criadas
     create_multiple_accounts(number_of_accounts)
