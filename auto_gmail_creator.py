@@ -19,12 +19,12 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 import random
 import time
-import requests
+import tempfile
+import shutil
+import os
 from unidecode import unidecode
 import uuid
 from fp.fp import FreeProxy  # Import FreeProxy
-import tempfile
-import os
 
 # User Agents list for random selection
 user_agents = [
@@ -84,7 +84,6 @@ arabic_first_names = [
     "Firas", "Zayd", "Taha", "Yasin", "Sakina", "Madiha", "Rasha", "Sufyan", "Nafisa", "Othman",
     "Safa", "Nabilah", "Hala", "Faten", "Aisha", "Hassan", "Zainab", "Nouran", "Raneem", "Youssef",
 ]
-
 arabic_last_names = [
     "Mohamed", "Ahmed", "Hussein", "Sayed", "Ismail", "Abdallah", "Khalil", "Soliman", "Nour", "Kamel",
     "Samir", "Ibrahim", "Othman", "Fouad", "Zaki", "Gamal", "Farid", "Mansour", "Adel", "Salem",
@@ -188,7 +187,7 @@ def fill_form(driver):
             skip_button.click()
         except Exception as skip_error:
             print("No phone number verification step.")
-
+        
         # Agree to terms
         agree_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button span.VfPpkd-vQzf8d")))
         agree_button.click()
@@ -220,7 +219,10 @@ def create_multiple_accounts(number_of_accounts):
         fill_form(driver)
         driver.quit()
         
-        # Adicionar um intervalo aleatório entre as criações de contas para evitar bloqueios
+        # Remover o diretório temporário após o uso
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        
+        # Adicionar um intervalo aleatório entre as criações de contas
         time.sleep(random.randint(5, 15))
 
 if __name__ == "__main__":
