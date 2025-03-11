@@ -11,18 +11,19 @@ print("""
        Website: https://www.shadowhackr.com
 ===================================================
 """)
-
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 import random
 import time
-import tempfile
+import requests
+from unidecode import unidecode
 import uuid
 from fp.fp import FreeProxy  # Import FreeProxy
+import tempfile
 
 # User Agents list for random selection
 user_agents = [
@@ -125,60 +126,65 @@ your_password = "lissin002020"
 # Fill out Gmail registration form
 def fill_form(driver):
     try:
+        device_uuid = uuid.uuid4()
+        print(f"Using device UUID: {device_uuid}")
         your_username = generate_username()
         driver.get("https://accounts.google.com/signup/v2/createaccount?flowName=GlifWebSignIn&flowEntry=SignUp")
-        
         # Fill in the name fields
         first_name = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "firstName")))
         last_name = driver.find_element(By.NAME, "lastName")
+        first_name.clear()
         first_name.send_keys(your_username.split('.')[0])
+        last_name.clear()
         last_name.send_keys(your_username.split('.')[1])
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-
         # Fill birthday and gender
+        wait = WebDriverWait(driver, 20)
+        day = wait.until(EC.visibility_of_element_located((By.NAME, "day")))
         birthday_elements = your_birthday.split()
         month_dropdown = Select(driver.find_element(By.ID, "month"))
         month_dropdown.select_by_value(birthday_elements[1])
         day_field = driver.find_element(By.ID, "day")
+        day_field.clear()
         day_field.send_keys(birthday_elements[0])
         year_field = driver.find_element(By.ID, "year")
+        year_field.clear()
         year_field.send_keys(birthday_elements[2])
         gender_dropdown = Select(driver.find_element(By.ID, "gender"))
         gender_dropdown.select_by_value(your_gender)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-
         # Create custom email
         time.sleep(2)
         if driver.find_elements(By.ID, "selectionc4"):
             create_own_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "selectionc4")))
             create_own_option.click()
-        username_field = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "Username")))
+        create_own_email = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "Username")))
+        username_field = driver.find_element(By.NAME, "Username")
+        username_field.clear()
         username_field.send_keys(your_username)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-
         # Enter and confirm password
         password_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "Passwd")))
+        password_field.clear()
         password_field.send_keys(your_password)
         confirm_passwd_div = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "confirm-passwd")))
         password_confirmation_field = confirm_passwd_div.find_element(By.NAME, "PasswdAgain")
+        password_confirmation_field.clear()
         password_confirmation_field.send_keys(your_password)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
-
         # Skip phone number and recovery email
         try:
             skip_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Skip')]")))
             skip_button.click()
         except Exception as skip_error:
             print("No phone number verification step.")
-
         # Agree to terms
         agree_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button span.VfPpkd-vQzf8d")))
         agree_button.click()
-
         print(f"Your Gmail successfully created:\n{{\ngmail: {your_username}@gmail.com\npassword: {your_password}\n}}")
         save_email_to_file(f"{your_username}@gmail.com", your_password)
     except Exception as e:
@@ -188,22 +194,19 @@ def fill_form(driver):
 # Create multiple accounts
 def create_multiple_accounts(number_of_accounts):
     for i in range(number_of_accounts):
-        firefox_options = FirefoxOptions()
-        firefox_options.add_argument("--disable-infobars")
-        firefox_options.add_argument("--no-sandbox")
-        firefox_options.add_argument("--disable-dev-shm-usage")
-        firefox_options.add_argument("--headless")  # Run in headless mode
-        temp_dir = tempfile.mkdtemp()  # Create a unique temporary directory
-        firefox_options.add_argument(f"--profile={temp_dir}")
+        chrome_options = ChromeOptions()
+        chrome_options.add_argument("--disable-infobars")
+        
+        # Criar um diretório temporário exclusivo para evitar conflitos
+        temp_dir = tempfile.mkdtemp()
+        chrome_options.add_argument(f"--user-data-dir={temp_dir}")
+        
         user_agent = random.choice(user_agents)
-        firefox_options.set_preference("general.useragent.override", user_agent)  # Set User-Agent
+        chrome_options.add_argument(f'user-agent={user_agent}')
         proxy = get_working_proxy()
-        firefox_options.set_preference("network.proxy.type", 1)
-        firefox_options.set_preference("network.proxy.http", proxy.split(":")[0])
-        firefox_options.set_preference("network.proxy.http_port", int(proxy.split(":")[1]))
-        firefox_options.set_preference("network.proxy.ssl", proxy.split(":")[0])
-        firefox_options.set_preference("network.proxy.ssl_port", int(proxy.split(":")[1]))
-        driver = webdriver.Firefox(service=FirefoxService("/usr/bin/geckodriver"), options=firefox_options)
+        chrome_options.add_argument(f'--proxy-server={proxy}')
+        
+        driver = webdriver.Chrome(options=chrome_options)
         fill_form(driver)
         driver.quit()
         time.sleep(random.randint(5, 15))
