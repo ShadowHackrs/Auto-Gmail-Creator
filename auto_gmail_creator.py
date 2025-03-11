@@ -130,6 +130,7 @@ def fill_form(driver):
         print(f"Using device UUID: {device_uuid}")
         your_username = generate_username()
         driver.get("https://accounts.google.com/signup/v2/createaccount?flowName=GlifWebSignIn&flowEntry=SignUp")
+        
         # Fill in the name fields
         first_name = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "firstName")))
         last_name = driver.find_element(By.NAME, "lastName")
@@ -139,6 +140,7 @@ def fill_form(driver):
         last_name.send_keys(your_username.split('.')[1])
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
+        
         # Fill birthday and gender
         wait = WebDriverWait(driver, 20)
         day = wait.until(EC.visibility_of_element_located((By.NAME, "day")))
@@ -155,6 +157,7 @@ def fill_form(driver):
         gender_dropdown.select_by_value(your_gender)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
+        
         # Create custom email
         time.sleep(2)
         if driver.find_elements(By.ID, "selectionc4"):
@@ -166,6 +169,7 @@ def fill_form(driver):
         username_field.send_keys(your_username)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
+        
         # Enter and confirm password
         password_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "Passwd")))
         password_field.clear()
@@ -176,12 +180,14 @@ def fill_form(driver):
         password_confirmation_field.send_keys(your_password)
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
+        
         # Skip phone number and recovery email
         try:
             skip_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Skip')]")))
             skip_button.click()
         except Exception as skip_error:
             print("No phone number verification step.")
+        
         # Agree to terms
         agree_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button span.VfPpkd-vQzf8d")))
         agree_button.click()
