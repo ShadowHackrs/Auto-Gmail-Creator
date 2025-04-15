@@ -135,7 +135,7 @@ This code configures Chrome with a randomized user agent and proxy to improve an
 
 ### License
 
-This project is licensed under the MIT License. For more information, https://www.arbgit.com/2024/10/gmail-auto-gmail-creator.html
+This project is licensed under the MIT License. For more information, https://www.shadowhackr.com/2024/10/gmail-auto-gmail-creator.html
 
 --- 
 ## Contact Me
