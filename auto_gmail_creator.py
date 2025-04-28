@@ -7,21 +7,19 @@ print("""
             ██║   ██║ ██║╚██╔╝██║██╔══██║██║     
             ╚██████╔╝ ██║ ╚═╝ ██║██║  ██║███████╗
              ╚═════╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝
-                                                  
        Automated Gmail Account Creator - By SHADOWHACKER
        Website: https://www.shadowhackr.com
 ===================================================
 """)
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 import random
 import time
-import requests
+import tempfile
 from unidecode import unidecode
 import uuid
 from fp.fp import FreeProxy  # Import FreeProxy
@@ -67,8 +65,6 @@ user_agents = [
     "Mozilla/5.0 (X11; CrOS x86_64 14526.69.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.82 Safari/537.36",
     "Mozilla/5.0 (X11; CrOS x86_64 14695.25.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.22 Safari/537.36",
     "Mozilla/5.0 (X11; CrOS x86_64 14526.89.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.91 Safari/537.36"
-       
-    # Add more User Agents
 ]
 
 # Arabic names written in English letters
@@ -86,8 +82,6 @@ arabic_first_names = [
     "Firas", "Zayd", "Taha", "Yasin", "Sakina", "Madiha", "Rasha", "Sufyan", "Nafisa", "Othman",
     "Safa", "Nabilah", "Hala", "Faten", "Aisha", "Hassan", "Zainab", "Nouran", "Raneem", "Youssef",
 ]
-
-
 arabic_last_names = [
     "Mohamed", "Ahmed", "Hussein", "Sayed", "Ismail", "Abdallah", "Khalil", "Soliman", "Nour", "Kamel",
     "Samir", "Ibrahim", "Othman", "Fouad", "Zaki", "Gamal", "Farid", "Mansour", "Adel", "Salem",
@@ -101,7 +95,6 @@ arabic_last_names = [
     "Ramzi", "Khalifa", "Hamed", "Anis", "Hussein", "Mahdi", "Samir", "Wahab", "Bakkar", "Najib",
     "Abdulhadi", "Alhaj", "Shahrani", "Sulieman", "Majeed", "Nazari", "Saber", "Tawfiq", "Sabry", "Sharif",
 ]
-
 
 # Function to get a working proxy
 def get_working_proxy():
@@ -124,9 +117,9 @@ def generate_username():
     return f"{first_name_normalized}.{last_name_normalized}{random_number}"
 
 # Account info
-your_birthday = "02 4 1950"
-your_gender = "1"
-your_password = "ShadowHacker##$$%%^^&&"
+your_birthday = "02 4 1995"
+your_gender = "2"
+your_password = "lissin002020"
 
 # Fill out Gmail registration form
 def fill_form(driver):
@@ -134,9 +127,8 @@ def fill_form(driver):
         device_uuid = uuid.uuid4()
         print(f"Using device UUID: {device_uuid}")
         your_username = generate_username()
-
         driver.get("https://accounts.google.com/signup/v2/createaccount?flowName=GlifWebSignIn&flowEntry=SignUp")
-
+        
         # Fill in the name fields
         first_name = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "firstName")))
         last_name = driver.find_element(By.NAME, "lastName")
@@ -144,7 +136,6 @@ def fill_form(driver):
         first_name.send_keys(your_username.split('.')[0])
         last_name.clear()
         last_name.send_keys(your_username.split('.')[1])
-
         next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "VfPpkd-LgbsSe")))
         next_button.click()
 
@@ -170,7 +161,6 @@ def fill_form(driver):
         if driver.find_elements(By.ID, "selectionc4"):
             create_own_option = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "selectionc4")))
             create_own_option.click()
-
         create_own_email = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "Username")))
         username_field = driver.find_element(By.NAME, "Username")
         username_field.clear()
@@ -207,21 +197,34 @@ def fill_form(driver):
         print("Failed to create your Gmail, Sorry")
         print(e)
 
+
 # Create multiple accounts
 def create_multiple_accounts(number_of_accounts):
     for i in range(number_of_accounts):
         chrome_options = ChromeOptions()
         chrome_options.add_argument("--disable-infobars")
-        chrome_options.add_argument("--user-data-dir=./cookies")
+        
+        # Criar um diretório temporário exclusivo para evitar conflitos
+        temp_dir = tempfile.mkdtemp()
+        chrome_options.add_argument(f"--user-data-dir={temp_dir}")
+        
         user_agent = random.choice(user_agents)
         chrome_options.add_argument(f'user-agent={user_agent}')
+        
         proxy = get_working_proxy()
         chrome_options.add_argument(f'--proxy-server={proxy}')
+        
         driver = webdriver.Chrome(options=chrome_options)
         fill_form(driver)
         driver.quit()
+        
+        # Remover o diretório temporário após o uso
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        
+        # Adicionar um intervalo aleatório entre as criações de contas
         time.sleep(random.randint(5, 15))
 
+
 if __name__ == "__main__":
-    number_of_accounts = 5
+    number_of_accounts = 5  # Número de contas a serem criadas
     create_multiple_accounts(number_of_accounts)
